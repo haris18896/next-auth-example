@@ -14,7 +14,8 @@ export default function LoginButton() {
   return (
     <>
       Not signed in <br />
-      <button onClick={() => signIn('github', { callbackUrl: 'http://localhost:3000' })}>Sign in (redirect)</button>
+      {/* <button onClick={() => signIn('github', { callbackUrl: 'http://localhost:3000' })}>Sign in (redirect)</button> */}
+      <button onClick={() => signIn()}>Sign in</button>
     </>
   )
 }

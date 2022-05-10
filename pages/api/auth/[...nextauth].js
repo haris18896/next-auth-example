@@ -5,6 +5,16 @@ import GithubProvider from 'next-auth/providers/github'
 import { signOut } from 'next-auth/react'
 
 export default NextAuth({
+  theme: {
+    colorScheme: 'dark', // "auto" | "dark" | "light"
+    brandColor: '#525289', // Hex color code
+    logo: '' // Absolute URL to image
+  },
+  pages: {
+    signIn: '/login'
+    // signIn: '/api/auth/email-signin'
+    // signIn: '/api/auth/credentials-signin'
+  },
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID,
@@ -46,6 +56,18 @@ export default NextAuth({
       }
     }
   },
+  logger: {
+    error(code, metadata) {
+      console.error(code, metadata)
+    },
+    warn(code) {
+      console.warn(code)
+    },
+    debug(code, metadata) {
+      console.debug(code, metadata)
+    }
+  },
+
   jwt: {
     maxAge: 60 * 60 * 24 * 30
   }
