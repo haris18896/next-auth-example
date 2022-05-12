@@ -10,11 +10,11 @@ export default NextAuth({
     brandColor: '#525289', // Hex color code
     logo: '' // Absolute URL to image
   },
-  pages: {
-    signIn: '/login'
-    // signIn: '/api/auth/email-signin'
-    // signIn: '/api/auth/credentials-signin'
-  },
+  // pages: {
+  //   signIn: '/login'
+  //   // signIn: '/api/auth/email-signin'
+  //   // signIn: '/api/auth/credentials-signin'
+  // },
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID,
@@ -33,17 +33,19 @@ export default NextAuth({
       return session
     },
     async redirect({ url, baseUrl }) {
-      if (url.includes('/api/auth/')) {
-        return baseUrl
-      }
-      return url
+      // Allows relative callback URLs
+      if (url.startsWith('/')) return `${baseUrl}${url}`
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url
+      return baseUrl
     },
     async signin({ user, account, profile, email, credentials }) {
-      // do something with the user
-      if (user) {
-        user.accessToken = account.access_token
+      const isAllowedToSignIn = true
+      if (isAllowedToSignIn) {
+        return true
+      } else {
+        return false
       }
-      return true
     },
     events: {
       async signIn(message) {

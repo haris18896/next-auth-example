@@ -1,5 +1,11 @@
 import '../styles/globals.css'
 import { SessionProvider, useSession } from 'next-auth/react'
+import ErrorBoundary from '../components/ErrorBoundary'
+import { Suspense } from 'react'
+
+export function reportWebVitals(metric) {
+  console.log(metric.name, metric)
+}
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   console.log('component auth', Component.auth)
@@ -7,10 +13,18 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     <SessionProvider session={session}>
       {Component.auth ? (
         <Auth>
-          <Component {...pageProps} />
+          <ErrorBoundary FallbackComponent={'ErrorFallback'}>
+            <Suspense fallback={<h3>Loading...</h3>}>
+              <Component {...pageProps} />
+            </Suspense>
+          </ErrorBoundary>
         </Auth>
       ) : (
-        <Component {...pageProps} />
+        <ErrorBoundary FallbackComponent={'ErrorFallback'}>
+          <Suspense fallback={<h3>Loading...</h3>}>
+            <Component {...pageProps} />
+          </Suspense>
+        </ErrorBoundary>
       )}
     </SessionProvider>
   )
